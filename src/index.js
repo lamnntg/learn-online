@@ -23,7 +23,7 @@ const bootServer = () => {
   app.use(express.urlencoded({ extended: true }));
 
   app.listen(env.APP_PORT, () => {
-    console.log(`hello : ${env.APP_PORT}`);
+    console.log(`Server is running on port : ${env.APP_PORT}`);
   });
 
   app.get("/", (req, res) => {

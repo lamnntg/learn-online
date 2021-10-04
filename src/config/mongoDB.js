@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
+import { env } from "../config/environments";
 
 export const connectDB = async () => {
-  const client = await mongoose.connect("mongodb://localhost:27017/test", {
+  const client = await mongoose.connect(env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
-
-  console.log("da ket noi");
+  console.log("connect to mongo DB ... ");
 };

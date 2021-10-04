@@ -3,7 +3,9 @@
 
 # Plan :
 
+
 # package install :
--dev @babel/core @babel/cli @babel/node @babel/preset-env @babel/plugin-transform-runtime --save @babel/runtime
+--dev @babel/core @babel/cli @babel/node @babel/preset-env @babel/plugin-transform-runtime 
+--save @babel/runtime
 
 
