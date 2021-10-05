@@ -6,9 +6,11 @@ mongoose.Promise = global.Promise;
 
 const auth = {};
 
+auth.mongoose = mongoose;
+
 auth.user = UserModel;
 auth.role = RoleModel;
 
-auth.ROLE = ["user", "admin", "moderator"];
+auth.ROLES = ["user", "admin", "moderator"];
 
-export const auth;
+export default auth;
