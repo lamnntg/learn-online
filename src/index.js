@@ -3,6 +3,8 @@ import express from "express";
 import { env } from "./config/environments";
 import { webRouter } from "./routes/web";
 import auth from "./models/auth";
+import { authRouter } from "./routes/web/auth";
+import { userRouter } from "./routes/web/user";
 
 const Role = auth.role;
 
@@ -64,6 +66,8 @@ const bootServer = () => {
   app.use(express.urlencoded({ extended: true }));
 
   app.use("/api/web", webRouter);
+  app.use("/", authRouter);
+  app.use("/", userRouter);
 
   app.listen(env.APP_PORT, () => {
     console.log(`Server is running on port : ${env.APP_PORT}`);
