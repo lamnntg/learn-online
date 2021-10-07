@@ -21,13 +21,12 @@ const userSchema = new mongoose.Schema(
     },
     roles: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: "Role",
       },
     ],
     birthday: Date,
   },
-  { timestamps: true }
 );
 
 export const UserModel = mongoose.model("User", userSchema);
