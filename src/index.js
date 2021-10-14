@@ -5,6 +5,7 @@ import { webRouter } from "./routes/web";
 import auth from "./models/auth";
 import { authRouter } from "./routes/web/auth";
 import { userRouter } from "./routes/web/user";
+import cors from "cors";
 
 const Role = auth.role;
 
@@ -61,6 +62,7 @@ const bootServer = () => {
   const app = express();
   // parse requests of content-type - application/json
   app.use(express.json());
+  app.use(cors());
 
   // parse requests of content-type - application/x-www-form-urlencoded
   app.use(express.urlencoded({ extended: true }));
