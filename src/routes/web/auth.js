@@ -13,14 +13,8 @@ router.use(function(req, res, next) {
   next();
 });
 
-router.get("/status", (req, res) => {
-  res.status(httpStatusCode.OK).json({
-    status: "Hello World",
-  });
-});
-
 router.post(
-  "/api/auth/signup",
+  "/signup",
   [
     verifySignUp.checkDuplicateUsernameOrEmail,
     verifySignUp.checkRolesExisted
@@ -28,6 +22,6 @@ router.post(
   authWebController.signup
 );
 
-router.post("/api/auth/signin", authWebController.signin);
+router.post("/signin", authWebController.signin);
 
 export const authRouter = router;

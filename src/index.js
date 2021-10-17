@@ -67,9 +67,7 @@ const bootServer = () => {
   // parse requests of content-type - application/x-www-form-urlencoded
   app.use(express.urlencoded({ extended: true }));
 
-  app.use("/api/web", webRouter);
-  app.use("/", authRouter);
-  app.use("/", userRouter);
+  app.use("/api", webRouter);
 
   app.listen(env.APP_PORT, () => {
     console.log(`Server is running on port : ${env.APP_PORT}`);
