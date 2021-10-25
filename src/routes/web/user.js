@@ -14,7 +14,11 @@ router.use(function (req, res, next) {
 
 router.get("/test/all", userController.allAccess);
 
-router.get("/test/user", [authJwt.verifyToken, authJwt.isModerator], userController.userBoard);
+router.get(
+  "/test/user",
+  [authJwt.verifyToken, authJwt.isModerator],
+  userController.userBoard
+);
 
 router.get(
   "/test/mod",
@@ -26,6 +30,12 @@ router.get(
   "/test/admin",
   [authJwt.verifyToken, authJwt.isAdmin],
   userController.adminBoard
+);
+
+router.put(
+  "/:id/update",
+  [authJwt.verifyToken],
+  userController.updateUser
 );
 
 export const userRouter = router;
