@@ -1,8 +1,15 @@
 import { UserModel } from "../models/user.model";
+import mongoose from "mongoose";
 
-const updateUser = async (id, user) => {
+const updateUser = async (id, data) => {
   try {
-    const result = await UserModel.updateOne(user);
+    const result = await UserModel.findOneAndUpdate(
+      { _id: mongoose.Types.ObjectId(id) },
+      data,
+      {
+        returnOriginal: false,
+      }
+    );
 
     return result;
   } catch (error) {

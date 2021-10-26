@@ -1,7 +1,6 @@
 import express from "express";
 import { authJwt } from "../../middlewares/authJwt";
 import { userController } from "../../controllers/web/user.web";
-
 const router = express.Router();
 
 router.use(function (req, res, next) {
