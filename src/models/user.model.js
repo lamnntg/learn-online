@@ -19,6 +19,22 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    description: {
+      type: String,
+      default: "Mô tả về bản thân",
+    },
+    avatar_url: {
+      type: String,
+      default: "https://seud.org/wp-content/uploads/2020/06/avatar-nobody.png",
+    },
+    address: {
+      type: String,
+      default: "Hà Nội, Việt Nam",
+    },
+    status: {
+      type: String,
+      default: "active",
+    },
     roles: [
       {
         type: mongoose.Types.ObjectId,
