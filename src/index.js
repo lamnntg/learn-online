@@ -1,7 +1,7 @@
 import { connectDB, initialDB } from "./config/mongoDB";
 import express from "express";
 import { env } from "./config/environments";
-import { webRouter } from "./routes/web";
+import { webRouter } from "./routes";
 import { Server } from "socket.io";
 import cors from "cors";
 import http from "http";

@@ -1,7 +1,7 @@
-import auth from "../../models/auth";
+import auth from "../models/auth";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import config from "../../config/auth";
+import config from "../config/auth";
 
 const User = auth.user;
 const Role = auth.role;

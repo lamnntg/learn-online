@@ -1,5 +1,5 @@
-import { userService } from "../../services/user.serivce";
-import { httpStatusCode } from "../../utillities/constants";
+import { userService } from "../services/user.serivce";
+import { httpStatusCode } from "../utillities/constants";
 
 const allAccess = (req, res) => {
   res.status(200).send("Public Content.");

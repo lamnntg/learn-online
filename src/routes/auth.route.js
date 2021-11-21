@@ -1,7 +1,7 @@
 import express from "express";
-import { httpStatusCode } from "../../utillities/constants";
-import { authWebController } from "../../controllers/web/auth.web";
-import { verifySignUp } from "../../middlewares/verifySignUp";
+import { httpStatusCode } from "../utillities/constants";
+import { authWebController } from "../controllers/auth.controller";
+import { verifySignUp } from "../middlewares/verifySignUp";
 
 const router = express.Router();
 
