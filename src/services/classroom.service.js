@@ -26,12 +26,14 @@ const createClassroom = async (data) => {
     owner: mongoose.Types.ObjectId(data.owner),
     moderator: [mongoose.Types.ObjectId(data.owner)],
   });
-
-  classroom.save((err, classroom) => {
-    if (err) throw err;
+  //validate
+  try {
+    await classroom.save();
 
     return classroom;
-  });
+  } catch (error) {
+    throw new Error(error);
+  }
 
 };
 

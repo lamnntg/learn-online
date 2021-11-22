@@ -13,6 +13,7 @@ const classroomSchema = new Schema({
   code: {
     type: String,
     required: true,
+    unique: true,
   },
   owner: {
     type: mongoose.Types.ObjectId,

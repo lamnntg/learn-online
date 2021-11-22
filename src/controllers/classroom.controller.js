@@ -4,7 +4,6 @@ import { httpStatusCode } from "../utillities/constants";
 const createClassroom = async (req, res) => {
   try {
     const result = await classroomService.createClassroom(req.body);
-    console.log(req.body);
     res.status(httpStatusCode.OK).json({ result: result });
   } catch (error) {
     res
