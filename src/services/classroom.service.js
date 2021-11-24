@@ -18,6 +18,11 @@ const updateClassroom = async (id, data) => {
   }
 };
 
+/**
+ * createClassroom
+ * @param {array} data
+ * @returns json
+ */
 const createClassroom = async (data) => {
   const classroom = new ClassroomModel({
     name: data.name,
@@ -34,7 +39,63 @@ const createClassroom = async (data) => {
   } catch (error) {
     throw new Error(error);
   }
-
 };
 
-export const classroomService = { updateClassroom, createClassroom };
+/**
+ * getClassroom
+ * @param {int} id
+ * @returns
+ */
+const getClassroom = async (id) => {
+  try {
+    const classroom = await ClassroomModel.findOne({
+      _id: mongoose.Types.ObjectId(id),
+    });
+
+    return classroom;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * getClassroomByOwner
+ * @param {int} ownerId
+ * @returns
+ */
+const getClassroomByModerator = async (moderatorId) => {
+  try {
+    const classroom = await ClassroomModel.find({
+      moderator: { $in: mongoose.Types.ObjectId(moderatorId) },
+    });
+
+    return classroom;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * getClassroomByUser
+ * @param {int} userId
+ * @returns
+ */
+const getClassroomByUser = async (userId) => {
+  try {
+    const classroom = await ClassroomModel.find({
+      user: mongoose.Types.ObjectId(userId),
+    });
+
+    return classroom;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const classroomService = {
+  updateClassroom,
+  createClassroom,
+  getClassroom,
+  getClassroomByModerator,
+  getClassroomByUser,
+};

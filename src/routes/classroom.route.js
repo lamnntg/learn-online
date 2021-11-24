@@ -18,5 +18,10 @@ router.post(
   classroomController.createClassroom
 );
 
+router.get(
+  "/get/user/:id",
+  [authJwt.verifyToken, authJwt.isModerator],
+  classroomController.getClassroomByModerator
+);
 
 export const classroomRouter = router;
