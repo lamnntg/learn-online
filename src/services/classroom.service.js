@@ -83,8 +83,31 @@ const getClassroomByModerator = async (moderatorId) => {
 const getClassroomByUser = async (userId) => {
   try {
     const classroom = await ClassroomModel.find({
-      user: mongoose.Types.ObjectId(userId),
+      user: { $in: mongoose.Types.ObjectId(userId) },
     });
+
+    return classroom;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+/**
+ * updateUserClassroom
+ *
+ * @param {*} userId
+ * @param {*} classroomId
+ * @returns
+ */
+const updateUserClassroom = async (classroomId, data) => {
+  try {
+    const classroom = await ClassroomModel.findOne({
+      _id: mongoose.Types.ObjectId(classroomId),
+    });
+
+    const newUsers = data.user.map((user) => mongoose.Types.ObjectId(user));
+    classroom.user = newUsers;
+    await classroom.save();
 
     return classroom;
   } catch (error) {
@@ -98,4 +121,5 @@ export const classroomService = {
   getClassroom,
   getClassroomByModerator,
   getClassroomByUser,
+  updateUserClassroom,
 };

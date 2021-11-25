@@ -19,9 +19,21 @@ router.post(
 );
 
 router.get(
-  "/get/user/:id",
+  "/get/by-moderator/:id",
   [authJwt.verifyToken, authJwt.isModerator],
   classroomController.getClassroomByModerator
+);
+
+router.get(
+  "/get/by-user/:id",
+  [authJwt.verifyToken],
+  classroomController.getClassroomByUser
+);
+
+router.post(
+  "/:id/update/user",
+  [authJwt.verifyToken, authJwt.isModerator],
+  classroomController.updateUserClassroom
 );
 
 export const classroomRouter = router;
