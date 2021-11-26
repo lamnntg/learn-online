@@ -10,6 +10,10 @@ const classroomSchema = new Schema({
     type: String,
     required: true,
   },
+  room: {
+    type: String,
+    required: true,
+  },
   code: {
     type: String,
     required: true,

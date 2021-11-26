@@ -28,6 +28,7 @@ const createClassroom = async (data) => {
     name: data.name,
     subject: data.subject,
     code: data.code,
+    room: data.room,
     owner: mongoose.Types.ObjectId(data.owner),
     moderator: [mongoose.Types.ObjectId(data.owner)],
   });
@@ -77,6 +78,7 @@ const getClassroomByModerator = async (moderatorId) => {
 
 /**
  * getClassroomByUser
+ *
  * @param {int} userId
  * @returns
  */
@@ -115,6 +117,30 @@ const updateUserClassroom = async (classroomId, data) => {
   }
 };
 
+/**
+ * updateModeratorClassroom
+ * @param {*} classroomId
+ * @param {*} data
+ * @returns
+ */
+const updateModeratorClassroom = async (classroomId, data) => {
+  try {
+    const classroom = await ClassroomModel.findOne({
+      _id: mongoose.Types.ObjectId(classroomId),
+    });
+
+    const newModerators = data.moderator.map((moderator) =>
+      mongoose.Types.ObjectId(moderator)
+    );
+    classroom.moderator = newModerators;
+    await classroom.save();
+
+    return classroom;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const classroomService = {
   updateClassroom,
   createClassroom,
@@ -122,4 +148,5 @@ export const classroomService = {
   getClassroomByModerator,
   getClassroomByUser,
   updateUserClassroom,
+  updateModeratorClassroom,
 };

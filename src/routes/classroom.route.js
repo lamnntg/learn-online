@@ -36,4 +36,10 @@ router.post(
   classroomController.updateUserClassroom
 );
 
+router.post(
+  "/:id/update/moderator",
+  [authJwt.verifyToken, authJwt.isModerator],
+  classroomController.updateModeratorClassroom
+);
+
 export const classroomRouter = router;
