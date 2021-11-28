@@ -42,4 +42,10 @@ router.post(
   classroomController.updateModeratorClassroom
 );
 
+router.post(
+  "/join",
+  [authJwt.verifyToken],
+  classroomController.joinClassroom
+);
+
 export const classroomRouter = router;

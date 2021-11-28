@@ -141,6 +141,23 @@ const updateModeratorClassroom = async (classroomId, data) => {
   }
 };
 
+/**
+ * joinClassroom
+ * @param {*} data
+ * @returns
+ */
+const joinClassroom = async (data) => {
+  try {
+    const classroom = await ClassroomModel.findOne({
+      code: mongoose.Types.ObjectId(data.code),
+    });
+    
+    return classroom;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export const classroomService = {
   updateClassroom,
   createClassroom,
@@ -149,4 +166,5 @@ export const classroomService = {
   getClassroomByUser,
   updateUserClassroom,
   updateModeratorClassroom,
+  joinClassroom,
 };
