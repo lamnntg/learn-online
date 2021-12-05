@@ -149,9 +149,12 @@ const updateModeratorClassroom = async (classroomId, data) => {
 const joinClassroom = async (data) => {
   try {
     const classroom = await ClassroomModel.findOne({
-      code: mongoose.Types.ObjectId(data.code),
+      code: data.code,
     });
-    
+
+    classroom.user.push(mongoose.Types.ObjectId(data.user_id));
+    await classroom.save();
+
     return classroom;
   } catch (error) {
     throw new Error(error);
