@@ -161,6 +161,18 @@ const joinClassroom = async (data) => {
   }
 };
 
+const getClassroomById = async (id) => {
+  try {
+    const classroom = await ClassroomModel.findOne({
+      _id: mongoose.Types.ObjectId(id),
+    });
+
+    return classroom;
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
 export const classroomService = {
   updateClassroom,
   createClassroom,
@@ -170,4 +182,5 @@ export const classroomService = {
   updateUserClassroom,
   updateModeratorClassroom,
   joinClassroom,
+  getClassroomById
 };

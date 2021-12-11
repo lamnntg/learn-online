@@ -12,6 +12,18 @@ const createClassroom = async (req, res) => {
   }
 };
 
+const getClassroomById = async (req, res) => {
+  try {
+    const result = await classroomService.getClassroomById(req.params.id);
+    res.status(httpStatusCode.OK).json({ result: result });
+  } catch (error) {
+    res
+      .status(httpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: new Error(error).message });
+  }
+};
+
+
 /**
  * getClassroomByUser
  * @param {*} req
@@ -93,5 +105,6 @@ export const classroomController = {
   getClassroomByUser,
   updateUserClassroom,
   updateModeratorClassroom,
-  joinClassroom
+  joinClassroom,
+  getClassroomById
 };

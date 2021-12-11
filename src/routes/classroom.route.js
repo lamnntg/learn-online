@@ -48,4 +48,10 @@ router.post(
   classroomController.joinClassroom
 );
 
+router.get(
+  "/:id",
+  [authJwt.verifyToken],
+  classroomController.getClassroomById
+);
+
 export const classroomRouter = router;
