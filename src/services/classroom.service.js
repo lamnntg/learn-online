@@ -171,7 +171,7 @@ const getClassroomById = async (id) => {
   } catch (error) {
     throw new Error(error);
   }
-}
+};
 
 export const classroomService = {
   updateClassroom,
@@ -182,5 +182,5 @@ export const classroomService = {
   updateUserClassroom,
   updateModeratorClassroom,
   joinClassroom,
-  getClassroomById
+  getClassroomById,
 };
