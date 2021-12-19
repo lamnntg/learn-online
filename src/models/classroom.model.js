@@ -24,13 +24,13 @@ const classroomSchema = new Schema({
     type: mongoose.Types.ObjectId,
     required: true,
   },
-  moderator: [
+  moderators: [
     {
       type: mongoose.Types.ObjectId,
       ref: "User",
     },
   ],
-  user: [
+  users: [
     {
       type: mongoose.Types.ObjectId,
       ref: "User",

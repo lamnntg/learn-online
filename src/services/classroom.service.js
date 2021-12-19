@@ -85,7 +85,7 @@ const getClassroomByModerator = async (moderatorId) => {
 const getClassroomByUser = async (userId) => {
   try {
     const classroom = await ClassroomModel.find({
-      user: { $in: mongoose.Types.ObjectId(userId) },
+      users: { $in: mongoose.Types.ObjectId(userId) },
     });
 
     return classroom;
@@ -107,8 +107,8 @@ const updateUserClassroom = async (classroomId, data) => {
       _id: mongoose.Types.ObjectId(classroomId),
     });
 
-    const newUsers = data.user.map((user) => mongoose.Types.ObjectId(user));
-    classroom.user = newUsers;
+    const newUsers = data.users.map((user) => mongoose.Types.ObjectId(user));
+    classroom.users = newUsers;
     await classroom.save();
 
     return classroom;
@@ -152,7 +152,7 @@ const joinClassroom = async (data) => {
       code: data.code,
     });
 
-    classroom.user.push(mongoose.Types.ObjectId(data.user_id));
+    classroom.users.push(mongoose.Types.ObjectId(data.user_id));
     await classroom.save();
 
     return classroom;
@@ -165,7 +165,31 @@ const getClassroomById = async (id) => {
   try {
     const classroom = await ClassroomModel.findOne({
       _id: mongoose.Types.ObjectId(id),
+    })
+      .populate({
+        path: "users",
+        populate: { path: "roles" },
+      })
+      .populate({
+        path: "moderators",
+        populate: { path: "roles" },
+      })
+      .exec();
+
+    var users = classroom.users.map((user) => {
+      var authorities = [];
+
+      for (let i = 0; i < user.roles.length; i++) {
+        authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+      }
+      delete user.roles;
+      Object.defineProperty(user, "roles", {
+        configurable: false,
+        value: authorities,
+      });
+      return user;
     });
+
 
     return classroom;
   } catch (error) {
