@@ -54,4 +54,16 @@ router.get(
   classroomController.getClassroomById
 );
 
+router.post(
+  "/:id/notification/create",
+  [authJwt.verifyToken],
+  classroomController.createClassroomNotification
+);
+
+router.get(
+  "/:id/notifications",
+  [authJwt.verifyToken],
+  classroomController.getClassroomNotifications
+);
+
 export const classroomRouter = router;

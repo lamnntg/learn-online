@@ -163,7 +163,7 @@ const joinClassroom = async (data) => {
 
 const getClassroomById = async (id) => {
   try {
-    const classroom = await ClassroomModel.findOne({
+    let classroom = await ClassroomModel.findOne({
       _id: mongoose.Types.ObjectId(id),
     })
       .populate({
@@ -172,7 +172,7 @@ const getClassroomById = async (id) => {
       })
       .populate({
         path: "moderators",
-        populate: { path: "roles" },
+        populate: { path: "roles" },  
       })
       .exec();
 

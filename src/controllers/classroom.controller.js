@@ -1,5 +1,9 @@
 import { classroomService } from "../services/classroom.service";
 import { httpStatusCode } from "../utillities/constants";
+import { ClassroomNotificationModel } from "../models/classroomNotification.model";
+import mongoose from "mongoose";
+
+const Schema = mongoose.Schema;
 
 const createClassroom = async (req, res) => {
   try {
@@ -22,7 +26,6 @@ const getClassroomById = async (req, res) => {
       .json({ message: new Error(error).message });
   }
 };
-
 
 /**
  * getClassroomByUser
@@ -88,16 +91,49 @@ const updateModeratorClassroom = async (req, res) => {
 
 const joinClassroom = async (req, res) => {
   try {
-    const result = await classroomService.joinClassroom(
-      req.body
-    );
+    const result = await classroomService.joinClassroom(req.body);
     res.status(httpStatusCode.OK).json({ result: result });
   } catch (error) {
     res
       .status(httpStatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: new Error(error).message });
   }
-}
+};
+
+const createClassroomNotification = async (req, res) => {
+  const classroomNotification = new ClassroomNotificationModel({
+    content: req.body.content,
+    classroom: mongoose.Types.ObjectId(req.params.id),
+    author_id: mongoose.Types.ObjectId(req.body.author_id),
+    author_name: req.body.author_name,
+    avatar_url: req.body.avatar_url,
+  }).save(function (err, result) {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    if (result) {
+      res.status(200).json(result);
+    }
+  });
+};
+
+const getClassroomNotifications = async (req, res) => {
+  ClassroomNotificationModel.find({
+    classroom: req.params.id,
+  })
+    .exec((err, notifications) => {
+      if (err) {
+        res.status(500).send({ message: err });
+      }
+
+      res.status(200).json(
+        notifications
+      );
+    });
+};
+
 
 export const classroomController = {
   createClassroom,
@@ -106,5 +142,7 @@ export const classroomController = {
   updateUserClassroom,
   updateModeratorClassroom,
   joinClassroom,
-  getClassroomById
+  getClassroomById,
+  createClassroomNotification,
+  getClassroomNotifications
 };
