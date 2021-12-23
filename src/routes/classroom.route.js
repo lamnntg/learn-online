@@ -66,4 +66,17 @@ router.get(
   classroomController.getClassroomNotifications
 );
 
+router.put(
+  "/notification/:id/update",
+  [authJwt.verifyToken, authJwt.isModerator],
+  classroomController.updateClassroomNotification
+);
+
+router.delete(
+  "/notification/:id/delete",
+  [authJwt.verifyToken, authJwt.isModerator],
+  classroomController.deleteClassroomNotification
+);
+
+
 export const classroomRouter = router;

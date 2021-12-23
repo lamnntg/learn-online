@@ -122,18 +122,40 @@ const createClassroomNotification = async (req, res) => {
 const getClassroomNotifications = async (req, res) => {
   ClassroomNotificationModel.find({
     classroom: req.params.id,
-  })
-    .exec((err, notifications) => {
+  }).exec((err, notifications) => {
+    if (err) {
+      res.status(500).send({ message: err });
+    }
+
+    res.status(200).json(notifications);
+  });
+};
+
+const deleteClassroomNotification = async (req, res) => {
+  ClassroomNotificationModel.deleteOne({
+    _id: req.params.id,
+  }).exec((err, result) => {
+    if (err) {
+      res.status(500).send({ message: err });
+    }
+
+    res.status(200).json(result);
+  });
+};
+
+const updateClassroomNotification = async (req, res) => {
+  ClassroomNotificationModel.updateOne(
+    { _id: req.params.id },
+    { content: req.body.content }
+  )
+    .exec((err, result) => {
       if (err) {
         res.status(500).send({ message: err });
       }
 
-      res.status(200).json(
-        notifications
-      );
+      res.status(200).json(result);
     });
 };
-
 
 export const classroomController = {
   createClassroom,
@@ -144,5 +166,7 @@ export const classroomController = {
   joinClassroom,
   getClassroomById,
   createClassroomNotification,
-  getClassroomNotifications
+  getClassroomNotifications,
+  deleteClassroomNotification,
+  updateClassroomNotification,
 };
