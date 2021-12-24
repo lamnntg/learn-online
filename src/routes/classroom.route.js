@@ -78,5 +78,22 @@ router.delete(
   classroomController.deleteClassroomNotification
 );
 
+router.get(
+  "/:id/documents",
+  [authJwt.verifyToken],
+  classroomController.getDocuments
+);
+
+router.post(
+  "/:id/document/create",
+  [authJwt.verifyToken, authJwt.isModerator],
+  classroomController.createDocument
+);
+
+router.delete(
+  "/document/:id/delete",
+  [authJwt.verifyToken, authJwt.isModerator],
+  classroomController.deleteDocument
+);
 
 export const classroomRouter = router;

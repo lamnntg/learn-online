@@ -1,6 +1,7 @@
 import { classroomService } from "../services/classroom.service";
 import { httpStatusCode } from "../utillities/constants";
 import { ClassroomNotificationModel } from "../models/classroomNotification.model";
+import { DocumentModel } from "../models/document.model";
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
@@ -147,14 +148,58 @@ const updateClassroomNotification = async (req, res) => {
   ClassroomNotificationModel.updateOne(
     { _id: req.params.id },
     { content: req.body.content }
-  )
-    .exec((err, result) => {
+  ).exec((err, result) => {
+    if (err) {
+      res.status(500).send({ message: err });
+    }
+
+    res.status(200).json(result);
+  });
+};
+
+const getDocuments = (req, res) => {
+  DocumentModel.find({
+    classroom: req.params.id,
+  })
+    .populate("author", "__v")
+    .exec((err, documents) => {
       if (err) {
         res.status(500).send({ message: err });
       }
 
-      res.status(200).json(result);
+      res.status(200).json(documents);
     });
+};
+
+const createDocument = (req, res) => {
+  const document = new DocumentModel({
+    title: req.body.title,
+    classroom: mongoose.Types.ObjectId(req.params.id),
+    url: req.body.url,
+    author: mongoose.Types.ObjectId(req.body.author_id),
+    type: req.body.type,
+  }).save(function (err, result) {
+    if (err) {
+      res.status(500).send({ message: err });
+      return;
+    }
+
+    if (result) {
+      res.status(200).json(result);
+    }
+  });
+};
+
+const deleteDocument = (req, res) => {
+  DocumentModel.deleteOne({
+    _id: req.params.id,
+  }).exec((err, result) => {
+    if (err) {
+      res.status(500).send({ message: err });
+    }
+
+    res.status(200).json(result);
+  });
 };
 
 export const classroomController = {
@@ -169,4 +214,7 @@ export const classroomController = {
   getClassroomNotifications,
   deleteClassroomNotification,
   updateClassroomNotification,
+  getDocuments,
+  createDocument,
+  deleteDocument,
 };
