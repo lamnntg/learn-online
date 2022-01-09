@@ -1,6 +1,9 @@
 import { HomeworkModel } from "../models/homework.model";
 import { ClassroomModel } from "../models/classroom.model";
 import mongoose from "mongoose";
+import express from "express";
+import { QuestionModel } from "../models/question.model";
+import { AnswerModel } from "../models/answer.model";
 
 /**
  * getHomeworkClassroom
@@ -19,20 +22,15 @@ const getHomeworkClassroom = async (id) => {
         message: "Classroom not found",
       };
     }
-    const homework = HomeworkModel.find({
+    const homeworks = HomeworkModel.find({
       classroom: mongoose.Types.ObjectId(id),
-    });
-
-    return homework;
-    // await ClassroomModel.findOne({ _id: mongoose.Types.ObjectId(id) }, (err, classroom) => {
-    //   if (err) throw new Error(err);
-    //   else if (!classroom) throw new Error("Classroom not found");
-    //   else {
-    //     const homework = HomeworkModel.find({ classroom: mongoose.Types.ObjectId(id) });
-
-    //     return homework;
-    //   }
-    // });
+    })
+      .populate({
+        path: "author",
+        populate: { path: "roles" },
+      })
+      .exec();
+    return homeworks;
   } catch (error) {
     throw new Error(error);
   }
@@ -48,11 +46,37 @@ const createHomework = async (data) => {
     const newHomework = new HomeworkModel({
       title: data.title,
       description: data.description,
-      class: mongoose.Types.ObjectId(data.classroom),
+      classroom: mongoose.Types.ObjectId(data.classroom),
       types: data.types,
-      duedate: data.duedate,
-      options: data.options,
+      startTime: data.startTime,
+      questions: [],
       author: mongoose.Types.ObjectId(data.author),
+      time: data.time,
+    });
+
+    data.questions.forEach((question) => {
+      let newQuestion = new QuestionModel({
+        question: question.questionText,
+        url: question.questionImage,
+        homework: mongoose.Types.ObjectId(newHomework._id),
+        author: mongoose.Types.ObjectId(data.author),
+        answers: [],
+      });
+
+      newHomework.questions.push(newQuestion._id);
+
+      question.options.forEach((option) => {
+        let answer = new AnswerModel({
+          answer: option.optionText,
+          isCorrect: option.isCorrect,
+          url: option.optionImage ? option.optionImage : null,
+          question: mongoose.Types.ObjectId(newQuestion._id),
+          point: option.point,
+        });
+        answer.save();
+        newQuestion.answers.push(answer._id);
+      });
+      newQuestion.save();
     });
 
     await newHomework.save();

@@ -172,7 +172,7 @@ const getClassroomById = async (id) => {
       })
       .populate({
         path: "moderators",
-        populate: { path: "roles" },  
+        populate: { path: "roles" },
       })
       .exec();
 
@@ -189,7 +189,6 @@ const getClassroomById = async (id) => {
       });
       return user;
     });
-
 
     return classroom;
   } catch (error) {

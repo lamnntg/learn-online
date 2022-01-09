@@ -19,6 +19,12 @@ router.get(
 );
 
 router.get(
+  "/:id",
+  [authJwt.verifyToken],
+  homeworkController.getHomeworkDetail
+);
+
+router.post(
   "/create",
   [authJwt.verifyToken, authJwt.isModerator],
   homeworkController.createHomework

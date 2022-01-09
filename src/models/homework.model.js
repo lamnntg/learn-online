@@ -15,7 +15,7 @@ const homeworkSchema = new Schema(
     classroom: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: "Class",
+      ref: "Classroom",
     },
     author: {
       type: Schema.Types.ObjectId,
@@ -24,7 +24,7 @@ const homeworkSchema = new Schema(
     },
     types: {
       type: String,
-      required: true,
+      required: false,
       enum: [
         "material",
         "short answer",
@@ -33,18 +33,19 @@ const homeworkSchema = new Schema(
         "checkbox",
       ],
     },
-    answer: {
-      type: Array,
+    questions: [{
+      type: Schema.Types.ObjectId,
       required: false,
-    },
-    duedate: {
+      ref: "Question",
+    }],
+    startTime: {
       type: Date,
       required: false,
     },
-    options: {
-      type: Array,
-      required: false,
-    },
+    time: {
+      type: Number,
+      required: true,
+    }
   },
   {
     timestamps: true,
