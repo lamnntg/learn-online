@@ -21,11 +21,6 @@ const answerSchema = new Schema(
       required: true,
       ref: "Question",
     },
-    point : {
-      type: Number,
-      required: true,
-      default: 1,
-    },
   },
   {
     timestamps: true,

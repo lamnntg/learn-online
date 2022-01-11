@@ -60,6 +60,7 @@ const createHomework = async (data) => {
         url: question.questionImage,
         homework: mongoose.Types.ObjectId(newHomework._id),
         author: mongoose.Types.ObjectId(data.author),
+        point: question.point,
         answers: [],
       });
 
@@ -71,7 +72,6 @@ const createHomework = async (data) => {
           isCorrect: option.isCorrect,
           url: option.optionImage ? option.optionImage : null,
           question: mongoose.Types.ObjectId(newQuestion._id),
-          point: option.point,
         });
         answer.save();
         newQuestion.answers.push(answer._id);

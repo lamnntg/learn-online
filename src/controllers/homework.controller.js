@@ -26,40 +26,17 @@ const createHomework = async (req, res) => {
 
 const getHomeworkDetail = async (req, res) => {
   try {
-    HomeworkModel.find({
+    HomeworkModel.findOne({
       _id: req.params.id,
     })
+      .populate({
+        path: "questions",
+        populate: { path: "answers" },
+      })
       .exec((err, homework) => {
         if (err) {
           res.status(500).send({ message: err });
         }
-        console.log(homework);
-        var questionsData = [];
-        homework.questions.forEach((qs) => {
-          const questionData = QuestionModel.findById(qs).exec(
-            (err, question) => {
-              if (err) {
-                res.status(500).send({ message: err });
-              }
-              var answersData = [];
-              question.answers.forEach((ans) => {
-                QuestionModel.findById(ans).exec(
-                  (err, answer) => {
-                    if (err) {
-                      res.status(500).send({ message: err });
-                    }
-                    answersData.push(answer);
-                  }
-                );
-              });
-              questionData["answers"] = answersData;
-            }
-          );
-          questionsData.push(questionData);
-        });
-
-        console.log(questionsData);
-        process.exit();
         res.status(200).json(homework);
       });
   } catch (error) {

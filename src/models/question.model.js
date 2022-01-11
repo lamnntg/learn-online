@@ -35,6 +35,11 @@ const questionSchema = new Schema(
       required: true,
       ref: "Answer",
     }],
+    point : {
+      type: Number,
+      required: true,
+      default: 1,
+    },
   },
   {
     timestamps: true,
