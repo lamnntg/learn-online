@@ -61,6 +61,7 @@ const createHomework = async (data) => {
         homework: mongoose.Types.ObjectId(newHomework._id),
         author: mongoose.Types.ObjectId(data.author),
         point: question.point,
+        type: question.type,
         answers: [],
       });
 

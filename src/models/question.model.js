@@ -22,13 +22,9 @@ const questionSchema = new Schema(
       required: true,
       ref: "User",
     },
-    types: {
+    type: {
       type: String,
-      required: false,
-      enum: [
-        "choice",
-        "answer",
-      ],
+      required: true,
     },
     answers:[{
       type:  Schema.Types.ObjectId,

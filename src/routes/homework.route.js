@@ -30,5 +30,12 @@ router.post(
   homeworkController.createHomework
 );
 
+router.post(
+  "/:id/finish",
+  [authJwt.verifyToken],
+  homeworkController.finishHomework
+);
+
+
 
 export const homeworkRouter = router;

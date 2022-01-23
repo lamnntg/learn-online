@@ -2,6 +2,9 @@ import { homeworkService } from "../services/homework.service";
 import { httpStatusCode } from "../utillities/constants";
 import { HomeworkModel } from "../models/homework.model";
 import { QuestionModel } from "../models/question.model";
+import { HomeworkResultModel } from "../models/homeworkResult.model";
+import { HomeworkResultDetailModel } from "../models/homeworkResultDetail.model";
+
 const getHomeworkByClassroom = async (req, res) => {
   try {
     const result = await homeworkService.getHomeworkClassroom(req.params.id);
@@ -46,8 +49,79 @@ const getHomeworkDetail = async (req, res) => {
   }
 };
 
+const finishHomework = async (req, res) => {
+  try {
+    HomeworkModel.findOne({
+      _id: req.params.id,
+    }).exec((err, homework) => {
+      if (err) {
+        res.status(500).send({ message: err });
+      }
+      if (!homework) {
+        return res.status(404).send({ message: "homework Not found." });
+      }
+      const homeworkDetail = req.body.homework;
+      const homeworkResultDetail = req.body.answers;
+
+      const currentHomeworkResult = HomeworkResultModel.findOne({
+        homework: homeworkDetail._id,
+        user: homeworkDetail.user,
+        classroom: homeworkDetail.classroom,
+      });
+      //
+      console.log(currentHomeworkResult);
+      if (!currentHomeworkResult) {
+        const newHomeworkResult = new HomeworkResultModel({
+          homework: homeworkDetail._id,
+          totalPoint: homeworkDetail.totalPoint,
+          classroom: homeworkDetail.classroom,
+          user: homeworkDetail.user,
+        });
+
+        var point = 0;
+        homeworkResultDetail.forEach((result) => {
+          var isCorrect = false;
+          if (result.type == "choose") {
+            let correctAnswer = 0;
+            result.answers.forEach((answer) => {
+              if (answer.isCorrect === answer.selected) {
+                correctAnswer = correctAnswer + 1;
+              }
+            });
+            if (correctAnswer === result.answers.length) {
+              isCorrect = true;
+              point = point + 1;
+            }
+          }
+
+          const newHomeworkResultDetail = new HomeworkResultDetailModel({
+            homeworkResult: newHomeworkResult._id,
+            question: result.question_id,
+            text_answer: result.text_answer,
+            type: result.type,
+            completed: result.completed,
+            answers: result.answers,
+            isCorrect: isCorrect,
+          });
+
+          newHomeworkResultDetail.save();
+        });
+        newHomeworkResult.point = point;
+        newHomeworkResult.save();
+      }
+
+      res.status(200).json(true);
+    });
+  } catch (error) {
+    res
+      .status(httpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: new Error(error).message });
+  }
+};
+
 export const homeworkController = {
   getHomeworkByClassroom,
   createHomework,
   getHomeworkDetail,
+  finishHomework,
 };
