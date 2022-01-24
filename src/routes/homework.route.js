@@ -18,11 +18,7 @@ router.get(
   homeworkController.getHomeworkByClassroom
 );
 
-router.get(
-  "/:id",
-  [authJwt.verifyToken],
-  homeworkController.getHomeworkDetail
-);
+router.get("/:id", [authJwt.verifyToken], homeworkController.getHomeworkDetail);
 
 router.post(
   "/create",
@@ -36,6 +32,10 @@ router.post(
   homeworkController.finishHomework
 );
 
-
+router.get(
+  "/:id/result",
+  [authJwt.verifyToken],
+  homeworkController.getResultHomework
+);
 
 export const homeworkRouter = router;

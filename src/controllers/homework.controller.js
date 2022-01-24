@@ -4,6 +4,7 @@ import { HomeworkModel } from "../models/homework.model";
 import { QuestionModel } from "../models/question.model";
 import { HomeworkResultModel } from "../models/homeworkResult.model";
 import { HomeworkResultDetailModel } from "../models/homeworkResultDetail.model";
+import mongoose from "mongoose";
 
 const getHomeworkByClassroom = async (req, res) => {
   try {
@@ -69,49 +70,70 @@ const finishHomework = async (req, res) => {
         classroom: homeworkDetail.classroom,
       });
       //
-      console.log(currentHomeworkResult);
-      if (!currentHomeworkResult) {
-        const newHomeworkResult = new HomeworkResultModel({
-          homework: homeworkDetail._id,
-          totalPoint: homeworkDetail.totalPoint,
-          classroom: homeworkDetail.classroom,
-          user: homeworkDetail.user,
-        });
+      // if (!currentHomeworkResult) {
+      const newHomeworkResult = new HomeworkResultModel({
+        homework: homeworkDetail._id,
+        totalPoint: homeworkDetail.totalPoint,
+        classroom: homeworkDetail.classroom,
+        user: homeworkDetail.user,
+      });
 
-        var point = 0;
-        homeworkResultDetail.forEach((result) => {
-          var isCorrect = false;
-          if (result.type == "choose") {
-            let correctAnswer = 0;
-            result.answers.forEach((answer) => {
-              if (answer.isCorrect === answer.selected) {
-                correctAnswer = correctAnswer + 1;
-              }
-            });
-            if (correctAnswer === result.answers.length) {
-              isCorrect = true;
-              point = point + 1;
+      var point = 0;
+      homeworkResultDetail.forEach((result) => {
+        var isCorrect = false;
+        if (result.type == "choose") {
+          let correctAnswer = 0;
+          result.answers.forEach((answer) => {
+            if (answer.isCorrect === answer.selected) {
+              correctAnswer = correctAnswer + 1;
             }
-          }
-
-          const newHomeworkResultDetail = new HomeworkResultDetailModel({
-            homeworkResult: newHomeworkResult._id,
-            question: result.question_id,
-            text_answer: result.text_answer,
-            type: result.type,
-            completed: result.completed,
-            answers: result.answers,
-            isCorrect: isCorrect,
           });
+          if (correctAnswer === result.answers.length) {
+            isCorrect = true;
+            point = point + 1;
+          }
+        }
 
-          newHomeworkResultDetail.save();
+        const newHomeworkResultDetail = new HomeworkResultDetailModel({
+          homeworkResult: newHomeworkResult._id,
+          question: result.question_id,
+          text_answer: result.text_answer,
+          type: result.type,
+          completed: result.completed,
+          answers: result.answers,
+          isCorrect: isCorrect,
         });
-        newHomeworkResult.point = point;
-        newHomeworkResult.save();
-      }
+
+        newHomeworkResultDetail.save();
+      });
+      newHomeworkResult.point = point;
+      newHomeworkResult.save();
+      // }
 
       res.status(200).json(true);
     });
+  } catch (error) {
+    res
+      .status(httpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: new Error(error).message });
+  }
+};
+
+const getResultHomework = async (req, res) => {
+  try {
+    HomeworkResultModel.find({
+      homework: mongoose.Types.ObjectId(req.params.id),
+    })
+      .populate({
+        path: "user",
+        populate: { path: "roles" },
+      })
+      .exec((err, homeworkResult) => {
+        if (err) {
+          res.status(500).send({ message: err });
+        }
+        res.status(200).json(homeworkResult);
+      });
   } catch (error) {
     res
       .status(httpStatusCode.INTERNAL_SERVER_ERROR)
@@ -124,4 +146,5 @@ export const homeworkController = {
   createHomework,
   getHomeworkDetail,
   finishHomework,
+  getResultHomework,
 };
