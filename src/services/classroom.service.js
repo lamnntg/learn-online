@@ -147,15 +147,18 @@ const updateModeratorClassroom = async (classroomId, data) => {
  * @returns
  */
 const joinClassroom = async (data) => {
+  //validate
   try {
     const classroom = await ClassroomModel.findOne({
-      code: data.code,
+      code: data.classroomCode,
     });
+    if (!classroom.users.includes(mongoose.Types.ObjectId(data.userId))) {
+      classroom.users.push(mongoose.Types.ObjectId(data.userId));
+      await classroom.save();
+      return classroom;
+    }
 
-    classroom.users.push(mongoose.Types.ObjectId(data.user_id));
-    await classroom.save();
-
-    return classroom;
+    return false;
   } catch (error) {
     throw new Error(error);
   }
