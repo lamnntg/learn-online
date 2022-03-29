@@ -1,5 +1,6 @@
 import express from "express";
 import { authJwt } from "../middlewares/authJwt";
+import { qaController } from "../controllers/qa.controller";
 
 const router = express.Router();
 
@@ -12,9 +13,15 @@ router.use(function (req, res, next) {
 });
 
 router.get(
-  "/qa/:id",
+  "/all",
   [authJwt.verifyToken],
-  homeworkController.getHomeworkByClassroom
+  qaController.getAllQuestions
+);
+
+router.post(
+  "/create",
+  [authJwt.verifyToken],
+  qaController.createQA
 );
 
 export const qaRouter = router;
