@@ -13,9 +13,15 @@ router.use(function (req, res, next) {
 });
 
 router.get(
-  "/all",
+  "/get/all",
   [authJwt.verifyToken],
   qaController.getAllQuestions
+);
+
+router.get(
+  "/get/by-user/:id",
+  [authJwt.verifyToken],
+  qaController.getAllQuestionsByUser
 );
 
 router.post(
