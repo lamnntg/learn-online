@@ -3,6 +3,7 @@ import { UserQuestionModel } from '../models/userQuestion.model';
 import mongoose from 'mongoose';
 import { uploadImage } from '../apis/imgBB.api';
 import { getBase64 } from '../helpers/convertToBase64';
+import { defaultsDeep } from 'lodash';
 
 const getAllQuestions = async (req, res) => {
   try {
@@ -19,11 +20,13 @@ const getAllQuestions = async (req, res) => {
 
 const createQA = async (req, res) => {
   let data = req.body;
-
+  let urlImage = await uploadImage(data.image);
+  
+  console.log(urlImage);
   const qa = new UserQuestionModel({
     title: data.title,
     description: data.desc,
-    url: data.image,
+    url: urlImage,
     author: data.author,
     content: data.content
   });
