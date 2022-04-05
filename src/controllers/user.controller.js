@@ -21,7 +21,6 @@ const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const result = await userService.updateUser(id, req.body);
-    console.log(id, req.body);
     res.status(httpStatusCode.OK).json({ result: result });
   } catch (error) {
     res

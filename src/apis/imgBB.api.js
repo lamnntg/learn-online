@@ -1,23 +1,23 @@
-import axios from "axios";
+import Axios from "axios";
 import { env } from "../config/environments";
 import FormData from "form-data";
 import { defaultsDeep } from "lodash";
 
 export const uploadImage = async (imageBase64) => {
   var bodyFormData = new FormData();
-  let base64Content = imageBase64.replace(/^data:image\/[a-z]+;base64,/, "")
+  let base64Content = imageBase64.replace(/^data:image\/[a-z]+;base64,/, "");
+  // bodyFormData.append('key', env.IMGBB_API_KEY)
   bodyFormData.append('image', base64Content);
 
-  try {
-    const res = await axios.post(`https://api.imgbb.com/1/upload?key=${env.IMGBB_API_KEY}`, bodyFormData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+  Axios({
+    method  : 'post',
+    url     :   `https://api.imgbb.com/1/upload?key=${env.IMGBB_API_KEY}`,
+    headers : bodyFormData.getHeaders(),
+    data    : bodyFormData
   })
-    console.log(res)
-  } catch (error) {
-    
-  }
-    
+    .then((resolve) => {
+      console.log(resolve.data.data);
+    })
+    .catch((error) => console.log(error));
 
 }
