@@ -9,6 +9,7 @@ export const uploadImage = async (imageBase64) => {
   // bodyFormData.append('key', env.IMGBB_API_KEY)
   bodyFormData.append('image', base64Content);
 
+  var url;
   await Axios({
     method  : 'post',
     url     :   `https://api.imgbb.com/1/upload?key=${env.IMGBB_API_KEY}`,
@@ -16,8 +17,9 @@ export const uploadImage = async (imageBase64) => {
     data    : bodyFormData
   })
     .then((resolve) => {
-      return resolve.data.data.image.url;
+      url = resolve.data.data.image.url;
     })
     .catch((error) => console.log(error));
 
+  return url;
 }

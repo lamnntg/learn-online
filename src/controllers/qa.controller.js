@@ -20,23 +20,25 @@ const getAllQuestions = async (req, res) => {
 
 const createQA = async (req, res) => {
   let data = req.body;
-  let urlImage = await uploadImage(data.image);
-  
-  const qa = new UserQuestionModel({
-    title: data.title,
-    description: data.desc,
-    url: urlImage,
-    author: data.author,
-    content: data.content
-  });
-  //validate
   try {
-    await qa.save();
-
-    res.status(200).json(qa);
+    await uploadImage(data.image)
+      .then((result) => {
+        console.log(result);
+        const qa = new UserQuestionModel({
+          title: data.title,
+          description: data.desc,
+          url: result,
+          author: data.author,
+          content: data.content
+        });
+        //validate
+          qa.save();
+          res.status(200).json(qa);
+      })
   } catch (error) {
     res.status(httpStatusCode.INTERNAL_SERVER_ERROR).json({ message: new Error(error).message });
   }
+  
 };
 
 const getAllQuestionsByUser = async (req, res) => {
