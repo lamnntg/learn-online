@@ -1,9 +1,10 @@
 import { homeworkService } from "../services/homework.service";
 import { httpStatusCode } from "../utillities/constants";
 import { HomeworkModel } from "../models/homework.model";
-import { QuestionModel } from "../models/question.model";
 import { HomeworkResultModel } from "../models/homeworkResult.model";
 import { HomeworkResultDetailModel } from "../models/homeworkResultDetail.model";
+import { convertPdf2Image } from "../apis/convertApi.api";
+
 import mongoose from "mongoose";
 
 const getHomeworkByClassroom = async (req, res) => {
@@ -141,10 +142,33 @@ const getResultHomework = async (req, res) => {
   }
 };
 
+const createHomeworkByPdf = async (req, res) => {
+  try {
+    const base64Content = req.params.pdf;
+    try {
+      await convertPdf2Image(base64Content)
+        .then((result) => {
+          console.log(result);
+
+          //validate
+        })
+    } catch (error) {
+      res.status(httpStatusCode.INTERNAL_SERVER_ERROR).json({ message: new Error(error).message });
+    }
+    
+  } catch (error) {
+    res
+      .status(httpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: new Error(error).message });
+  }
+};
+
+
 export const homeworkController = {
   getHomeworkByClassroom,
   createHomework,
   getHomeworkDetail,
   finishHomework,
   getResultHomework,
+  createHomeworkByPdf,
 };

@@ -38,4 +38,10 @@ router.get(
   homeworkController.getResultHomework
 );
 
+router.post(
+  "/create/by-pdf",
+  [authJwt.verifyToken],
+  homeworkController.createHomeworkByPdf
+);
+
 export const homeworkRouter = router;
