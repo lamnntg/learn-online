@@ -1,18 +1,19 @@
-import Axios from "axios";
+import Axios from 'axios';
 
-export const cropQuestionFromImage = async (urlImage) => {
+export const cropQuestionFromImage = async urlImage => {
   await Axios({
-    method: "get",
+    method: 'get',
     url: `https://crop-questions-api.herokuapp.com/get-image-questions`,
     data: {
-      image_url: urlImage,
-    },
+      image_url: urlImage
+    }
   })
-    .then((resolve) => {
-      return resolve.images;
+    .then(res => {
+      return res.images;
     })
-    .catch((error) => {
+    .catch(error => {
       console.log(error);
       return error;
     });
 };
+
