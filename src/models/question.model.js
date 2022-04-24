@@ -6,7 +6,7 @@ const questionSchema = new Schema(
   {
     question: {
       type: String,
-      required: true,
+      required: false,
     },
     url: {
       type: String,
@@ -24,7 +24,7 @@ const questionSchema = new Schema(
     },
     type: {
       type: String,
-      required: true,
+      required: false,
     },
     answers:[{
       type:  Schema.Types.ObjectId,

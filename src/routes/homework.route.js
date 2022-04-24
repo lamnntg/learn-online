@@ -44,4 +44,17 @@ router.post(
   homeworkController.createHomeworkByPdf
 );
 
+router.post(
+  "/:id/update",
+  [authJwt.verifyToken],
+  homeworkController.updateHomework
+);
+
+router.post(
+  "/delete",
+  [authJwt.verifyToken, authJwt.isModerator],
+  homeworkController.deleteHomework
+);
+
+
 export const homeworkRouter = router;

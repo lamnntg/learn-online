@@ -143,30 +143,51 @@ const getResultHomework = async (req, res) => {
 
 const createHomeworkByPdf = async (req, res) => {
   try {
-    const arrImages = req.body.data;
-    var promiseApis = new Promise((resolve, reject) => {
-      var questionImages = [];
-      arrImages.forEach(async (image, index) => {
-        await cropQuestionFromImage(image.Url).then((res) => {
-          console.log(res);
-          questionImages = [...questionImages, req.images];
-        });
-        if (index === arrImages.length - 1) {
-          resolve(questionImages);
-        }
-      });
-    });
+    const arrImages = req.body.url_images;
+    const userId = req.body.user_id;
+    const classroomId = req.body.classroom_id;
 
-    promiseApis.then((result) => {
-      
-      res.status(200).json(result);
+    const questionImages = arrImages.map(async (image) => {
+      var resUrls = await cropQuestionFromImage(image.Url);
+      return resUrls.images;
     });
+    const dataResponses = await Promise.all(questionImages);
+    const imagesUrl = dataResponses.flat();
+    const data = await homeworkService.handleImagesUrlExam(classroomId, userId, imagesUrl);
+    const exam = await homeworkService.createHomework(data);
+
+    res.status(200).json({exam_id: exam._id });
   } catch (error) {
     res
       .status(httpStatusCode.INTERNAL_SERVER_ERROR)
       .json({ message: new Error(error).message });
   }
 };
+
+const updateHomework = async (req, res) => {
+  try {
+    const result = await homeworkService.updateHomework(req.params.id, req.body);
+    res.status(httpStatusCode.OK).json({ result: result });
+    
+  } catch (error) {
+    res
+      .status(httpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: new Error(error).message });
+  }
+}
+
+const deleteHomework = async (req, res) => {
+  try {
+    const result = await homeworkService.deleteHomework(req.body.id);
+    res.status(httpStatusCode.OK).json({ result: result });
+    
+  } catch (error) {
+    res
+      .status(httpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: new Error(error).message });
+  }
+}
+
 
 export const homeworkController = {
   getHomeworkByClassroom,
@@ -175,4 +196,6 @@ export const homeworkController = {
   finishHomework,
   getResultHomework,
   createHomeworkByPdf,
+  updateHomework,
+  deleteHomework
 };
