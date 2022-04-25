@@ -14,8 +14,13 @@ const questionSchema = new Schema(
     },
     homework: {
       type: Schema.Types.ObjectId,
-      required: true,
+      required: false,
       ref: "Homework",
+    },
+    exam_course: {
+      type: Schema.Types.ObjectId,
+      required: false,
+      ref: "ExamCourse",
     },
     author: {
       type: Schema.Types.ObjectId,
