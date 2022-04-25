@@ -37,4 +37,10 @@ router.put(
   userController.updateUser
 );
 
+router.post(
+  "/avatar/update",
+  [authJwt.verifyToken],
+  userController.updateAvatar
+)
+
 export const userRouter = router;
