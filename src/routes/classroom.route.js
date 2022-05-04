@@ -37,6 +37,12 @@ router.post(
 );
 
 router.post(
+  "/:id/users/import",
+  [authJwt.verifyToken, authJwt.isModerator],
+  classroomController.storeUsersImport
+);
+
+router.post(
   "/:id/update/moderator",
   [authJwt.verifyToken, authJwt.isModerator],
   classroomController.updateModeratorClassroom

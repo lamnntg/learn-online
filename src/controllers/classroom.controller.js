@@ -2,7 +2,9 @@ import { classroomService } from "../services/classroom.service";
 import { httpStatusCode } from "../utillities/constants";
 import { ClassroomNotificationModel } from "../models/classroomNotification.model";
 import { DocumentModel } from "../models/document.model";
+import { UserClassroomPendingModel } from "../models/userClassroomPending.model";
 import mongoose from "mongoose";
+import { UserModel } from "../models/user.model";
 
 const Schema = mongoose.Schema;
 
@@ -202,6 +204,38 @@ const deleteDocument = (req, res) => {
   });
 };
 
+const storeUsersImport = async (req, res) => {
+  try {
+    const users = req.body.users;
+    await Promise.all(
+      users.map(async (user) => {
+        await UserModel.findOneAndUpdate(
+          { email: user.email },
+          {
+            status: "pending",
+          }
+        );
+
+        const userClassroomPending = new UserClassroomPendingModel({
+          classroom: mongoose.Types.ObjectId(req.params.id),
+          address: user.address,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+        });
+
+        await userClassroomPending.save();
+      })
+    );
+
+    res.status(httpStatusCode.OK).json({ result: users });
+  } catch (error) {
+    res
+      .status(httpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: new Error(error).message });
+  }
+};
+
 export const classroomController = {
   createClassroom,
   getClassroomByModerator,
@@ -217,4 +251,5 @@ export const classroomController = {
   getDocuments,
   createDocument,
   deleteDocument,
+  storeUsersImport,
 };
