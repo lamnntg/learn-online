@@ -47,5 +47,14 @@ const getAllQuestionsByUser = async (req, res) => {
   }
 };
 
-export const qaController = { getAllQuestions, createQA, getAllQuestionsByUser };
+const getQuestionById = async (req, res) => {
+  try {
+    const result = await UserQuestionModel.find({ _id: mongoose.Types.ObjectId(req.params.id) });
+    res.status(httpStatusCode.OK).json({ result: result });
+  } catch (error) {
+    res.status(httpStatusCode.INTERNAL_SERVER_ERROR).json({ message: new Error(error).message });
+  }
+};
+
+export const qaController = { getAllQuestions, createQA, getAllQuestionsByUser, getQuestionById };
 

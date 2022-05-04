@@ -49,12 +49,23 @@ const updateAvatar = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await userService.getUserById(id);
+    res.status(httpStatusCode.OK).json({ result: result });
+  } catch (error) {
+    res.status(httpStatusCode.INTERNAL_SERVER_ERROR).json({ message: new Error(error).message });
+  }
+};
+
 export const userController = {
   allAccess,
   userBoard,
   adminBoard,
   moderatorBoard,
   updateUser,
-  updateAvatar
+  updateAvatar,
+  getUserById
 };
 
