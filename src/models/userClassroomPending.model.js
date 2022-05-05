@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const userClassroomPendingSchema = new Schema({
+	classroom : {
+		type : Schema.Types.ObjectId,
+		ref : 'Classroom'
+	},
 	name: {
 		type: String,
 		required: true,

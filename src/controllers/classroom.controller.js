@@ -207,6 +207,7 @@ const deleteDocument = (req, res) => {
 const storeUsersImport = async (req, res) => {
   try {
     const users = req.body.users;
+    let returnData = [];
     await Promise.all(
       users.map(async (user) => {
         await UserModel.findOneAndUpdate(
@@ -225,10 +226,30 @@ const storeUsersImport = async (req, res) => {
         });
 
         await userClassroomPending.save();
+        returnData.push(userClassroomPending);
       })
     );
 
-    res.status(httpStatusCode.OK).json({ result: users });
+    res.status(httpStatusCode.OK).json({ result: returnData });
+  } catch (error) {
+    res
+      .status(httpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({ message: new Error(error).message });
+  }
+};
+
+const getUsersPending = (req, res) => {
+  console.log(req.params.id);
+  try {
+    UserClassroomPendingModel.find({
+      classroom: req.params.id,
+    }).exec((err, users) => {
+      if (err) {
+        res.status(500).send({ message: err });
+      }
+
+      res.status(200).json({users : users});
+    });
   } catch (error) {
     res
       .status(httpStatusCode.INTERNAL_SERVER_ERROR)
@@ -252,4 +273,5 @@ export const classroomController = {
   createDocument,
   deleteDocument,
   storeUsersImport,
+  getUsersPending,
 };

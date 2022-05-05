@@ -36,6 +36,12 @@ router.post(
   classroomController.updateUserClassroom
 );
 
+router.get(
+  "/:id/get-users/pending",
+  [authJwt.verifyToken],
+  classroomController.getUsersPending
+);
+
 router.post(
   "/:id/users/import",
   [authJwt.verifyToken, authJwt.isModerator],
