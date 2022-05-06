@@ -22,6 +22,8 @@ router.post('/avatar/update', [authJwt.verifyToken], userController.updateAvatar
 
 router.post('/get-invite', [authJwt.verifyToken], userController.getClassroomInvite);
 
+router.post('/submit-invite', [authJwt.verifyToken], userController.submitInvite);
+
 router.get('/:id', [authJwt.verifyToken], userController.getUserById);
 
 export const userRouter = router;
