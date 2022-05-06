@@ -4,6 +4,7 @@ import { uploadImage } from '../apis/imgBB.api';
 import { UserModel } from '../models/user.model';
 import { UserClassroomPendingModel } from '../models/userClassroomPending.model';
 import { ClassroomModel } from '../models/classroom.model';
+import mongoose from "mongoose";
 
 const allAccess = (req, res) => {
   res.status(200).send('Public Content.');
@@ -83,13 +84,13 @@ const submitInvite = async (req, res) => {
   try {
     const { id, status, userId, classroomId } = req.body;
     await UserClassroomPendingModel.findOneAndRemove({
-      _id: id
+      _id: mongoose.Types.ObjectId(id)
     });
 
-    if (status === 'accept') {
+    if (status === 'accepted') {
       await ClassroomModel.findOneAndUpdate(
         {
-          _id: classroomId
+          _id:  mongoose.Types.ObjectId(classroomId)
         },
         {
           $push: { users: userId }
