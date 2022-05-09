@@ -9,7 +9,7 @@ const userCourseSchema = new Schema({
     ref: "Course"
   },
   status: {
-    type: string,
+    type: String,
     required: true,
     enum: [
       "finished",

@@ -18,4 +18,10 @@ router.get(
   courseController.getAllCourse
 );
 
+router.get(
+  "/get/all",
+  [authJwt.verifyToken, authJwt.isModerator],
+  courseController.createCourse
+);
+
 export const courseRoute = router;
