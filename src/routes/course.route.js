@@ -19,8 +19,8 @@ router.get(
 );
 
 router.get(
-  "/get/all",
-  [authJwt.verifyToken, authJwt.isModerator],
+  "/create",
+  [authJwt.verifyToken],
   courseController.createCourse
 );
 
