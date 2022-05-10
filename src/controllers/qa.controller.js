@@ -104,12 +104,14 @@ const storeUserAnswer = async (req, res) => {
 
 const getUserAnswer = async (req, res) => {
 	try {
-		UserAnswerModel.find({ userQuestion: mongoose.Types.ObjectId(req.params.id) }).exec((err, questions) => {
-			if (err) {
-				res.status(500).send({ message: err });
-			}
-			res.status(200).json({result: questions});
-		})
+		UserAnswerModel.find({ userQuestion: mongoose.Types.ObjectId(req.params.id) })
+			.populate("user", "__v")
+			.exec((err, questions) => {
+				if (err) {
+					res.status(500).send({ message: err });
+				}
+				res.status(200).json({result: questions});
+			})
 
 	} catch (error) {
 		res.status(httpStatusCode.INTERNAL_SERVER_ERROR).json({ message: new Error(error).message });
