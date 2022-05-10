@@ -18,6 +18,11 @@ router.post('/create', [authJwt.verifyToken], qaController.createQA);
 router.get('/get/:id', [authJwt.verifyToken], qaController.getQuestionById);
 
 router.delete('/delete/:id', [authJwt.verifyToken], qaController.deleteQuestionById);
+
 router.put('/:id', [authJwt.verifyToken], qaController.updateQuestionById);
+
+router.get('/get-answers/:id', [authJwt.verifyToken], qaController.getUserAnswer);
+
+router.get('/store-answers', [authJwt.verifyToken], qaController.storeUserAnswer);
 
 export const qaRouter = router;

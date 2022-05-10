@@ -7,8 +7,9 @@ const UserAnswerSchema = new Schema(
     userQuestion: {
       type: Schema.Types.ObjectId,
       required: true,
+      ref: "UserQuestion",
     },
-    author: {
+    user: {
       type: Schema.Types.ObjectId,
       required: true,
       ref: "User",
