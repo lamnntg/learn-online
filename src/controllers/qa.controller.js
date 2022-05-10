@@ -103,10 +103,8 @@ const storeUserAnswer = async (req, res) => {
 };
 
 const getUserAnswer = async (req, res) => {
-	let id = req.params.id;
-
 	try {
-		UserQuestionModel.find({_id: id }).exec((err, questions) => {
+		UserAnswerModel.find({ userQuestion: mongoose.Types.ObjectId(req.params.id) }).exec((err, questions) => {
 			if (err) {
 				res.status(500).send({ message: err });
 			}
