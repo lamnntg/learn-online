@@ -23,6 +23,6 @@ router.put('/:id', [authJwt.verifyToken], qaController.updateQuestionById);
 
 router.get('/get-answers/:id', [authJwt.verifyToken], qaController.getUserAnswer);
 
-router.get('/store-answers', [authJwt.verifyToken], qaController.storeUserAnswer);
+router.post('/store-answers', [authJwt.verifyToken], qaController.storeUserAnswer);
 
 export const qaRouter = router;

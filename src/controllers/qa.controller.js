@@ -91,7 +91,7 @@ const storeUserAnswer = async (req, res) => {
 	try {
 		const userAnswer = new UserAnswerModel({
 			userQuestion: data.userQuestion,
-			author: data.authorId,
+			user: data.userId,
 			content: data.content,
 		});
 

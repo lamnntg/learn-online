@@ -12,7 +12,7 @@ const getAllCourse = (req, res) => {
       if (err) {
         res.status(500).send({ message: err });
       }
-
+      
       res.status(httpStatusCode.OK).json({ data: courses });
     });
   } catch (error) {
