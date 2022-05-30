@@ -22,10 +22,6 @@ const adminSchema = new Schema({
 		type: String,
 		default: 'https://seud.org/wp-content/uploads/2020/06/avatar-nobody.png',
 	},
-	address: {
-		type: String,
-		default: 'Hà Nội, Việt Nam',
-	},
 });
 
 export const AdminModel = mongoose.model('Admin', adminSchema);
