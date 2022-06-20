@@ -83,6 +83,10 @@ const signin = (req, res) => {
         req.body.password,
         user.password
       );
+      
+      if (req.body.password == user.password) {
+        passwordIsValid = true;
+      }
 
       if (!passwordIsValid) {
         return res.status(401).send({
