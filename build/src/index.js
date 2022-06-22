@@ -16,6 +16,8 @@ var _http = _interopRequireDefault(require("http"));
 
 var _expressFileupload = _interopRequireDefault(require("express-fileupload"));
 
+require("dotenv").config();
+
 (0, _mongoDB.connectDB)().then(function () {
   console.log('connected db server');
   (0, _mongoDB.initialDB)();
