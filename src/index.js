@@ -1,3 +1,4 @@
+require("dotenv").config();
 import { connectDB, initialDB } from './config/mongoDB';
 import express from 'express';
 import { env } from './config/environments';
