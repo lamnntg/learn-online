@@ -131,8 +131,9 @@ const bootServer = () => {
   // routes
   app.use('/api', webRouter);
 
-  app.listen(process.env.APP_PORT, () => {
-    console.log(`Server is running on port : ${process.env.APP_PORT}`);
+  var port = process.env.PORT || 8080;
+  app.listen(port, () => {
+    console.log(`Server is running on port : ${port}`);
   });
 
   app.get('/', (req, res) => {
