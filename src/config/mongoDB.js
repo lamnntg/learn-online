@@ -12,7 +12,7 @@ export const connectDB = async () => {
   console.log("connect to mongo DB ... ");
 };
 
-export const initialDB = () => {
+export const initialDB = async () => {
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new Role({

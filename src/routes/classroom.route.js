@@ -12,7 +12,7 @@ router.use(function (req, res, next) {
   next();
 });
 
-router.post(
+router.post(  
   "/create",
   [authJwt.verifyToken, authJwt.isModerator],
   classroomController.createClassroom
@@ -109,3 +109,4 @@ router.delete(
 );
 
 export const classroomRouter = router;
+4

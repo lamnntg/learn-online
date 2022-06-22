@@ -2,7 +2,6 @@ import { connectDB, initialDB } from './config/mongoDB';
 import express from 'express';
 import { env } from './config/environments';
 import { webRouter } from './routes';
-import { socket } from 'socket.io';
 import cors from 'cors';
 import http from 'http';
 import fileUpload from 'express-fileupload';
@@ -126,13 +125,13 @@ const bootServer = () => {
     });
   });
 
-  server.listen(process.env.PORT || 8000, () => console.log('socket is running on port 8000'));
+  server.listen(process.env.APP_WS_PORT || 8000, () => console.log('socket is running on port 8000'));
 
   // routes
   app.use('/api', webRouter);
 
-  app.listen(env.APP_PORT, () => {
-    console.log(`Server is running on port : ${env.APP_PORT}`);
+  app.listen(process.env.APP_PORT, () => {
+    console.log(`Server is running on port : ${process.env.APP_PORT}`);
   });
 
   app.get('/', (req, res) => {
