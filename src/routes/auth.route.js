@@ -24,4 +24,7 @@ router.post(
 
 router.post("/signin", authWebController.signin);
 
+router.post("/admin/signin", authWebController.adminSignin);
+
+
 export const authRouter = router;

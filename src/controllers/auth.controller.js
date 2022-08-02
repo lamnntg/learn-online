@@ -119,4 +119,74 @@ const signin = (req, res) => {
     });
 };
 
-export const authWebController = { signup, signin };
+const adminSignin = (req, res) => {
+  User.findOne({
+    username: req.body.username,
+  })
+    .populate("roles", "-__v")
+    .exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
+
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+      
+      var authorities = [];
+      var isAdmin = false;
+      for (let i = 0; i < user.roles.length; i++) {
+        if (user.roles[i].name == "admin") {
+          isAdmin = true;
+        }
+          
+        authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+      }
+
+      if (!isAdmin) {
+        return res.status(401).send({
+          accessToken: null,
+          message: "You are not Admin!",
+        });        
+      }
+
+      console.log(authorities);
+
+      var passwordIsValid = bcrypt.compareSync(
+        req.body.password,
+        user.password
+      );
+      
+      if (req.body.password == user.password) {
+        passwordIsValid = true;
+      }
+
+      if (!passwordIsValid) {
+        return res.status(401).send({
+          accessToken: null,
+          message: "Invalid Password!",
+        });
+      }
+
+      var token = jwt.sign({ id: user.id }, config.secret, {
+        expiresIn: 86400, // 24 hours
+      });
+
+
+      res.status(200).send({
+        id: user._id,
+        name: user.name,
+        username: user.username,
+        email: user.email,
+        description: user.description,
+        address: user.address,
+        status: user.status,
+        avatar_url: user.avatar_url,
+        roles: authorities,
+        accessToken: token,
+      });
+    });
+};
+
+export const authWebController = { signup, signin, adminSignin };

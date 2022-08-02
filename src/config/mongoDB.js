@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import { env } from "../config/environments";
 import auth from "../models/auth";
 import { SubjectModel } from "../models/subject.model";
+import { UserModel } from "../models/user.model";
+import bcrypt from "bcryptjs";
 const Role = auth.role;
 
 export const connectDB = async () => {
@@ -16,8 +18,8 @@ export const initialDB = async () => {
   Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new Role({
-        name: "user"
-      }).save(err => {
+        name: "user",
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }
@@ -26,8 +28,8 @@ export const initialDB = async () => {
       });
 
       new Role({
-        name: "moderator"
-      }).save(err => {
+        name: "moderator",
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }
@@ -36,8 +38,8 @@ export const initialDB = async () => {
       });
 
       new Role({
-        name: "admin"
-      }).save(err => {
+        name: "admin",
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }
@@ -49,8 +51,8 @@ export const initialDB = async () => {
   SubjectModel.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new SubjectModel({
-        name: "Default Subject"
-      }).save(err => {
+        name: "Default Subject",
+      }).save((err) => {
         if (err) {
           console.log("error", err);
         }
@@ -59,4 +61,27 @@ export const initialDB = async () => {
       });
     }
   });
-}
+
+  // init account Admin
+  UserModel.estimatedDocumentCount(async (err, count) => {
+    let roles = await Role.find();
+    let defaultAdmin  = await UserModel.findOne({ email: "admin@admin.com" });
+    if (!err && count === 0 || defaultAdmin === null) {
+      new UserModel({
+        address: "Ha Noi, Viet Nam",
+        description: "Mô tả về bản thân",
+        email: "admin@admin.com",
+        name: "Nguyễn Tùng Lâm",
+        username: "admin",
+        password: bcrypt.hashSync("admin", 8),
+        roles: [roles[0]._id, roles[1]._id, roles[2]._id],
+      }).save((err) => {
+        if (err) {
+          console.log("error", err);
+        }
+
+        console.log("added Defaut Admin to User collection");
+      });
+    }
+  });
+};
