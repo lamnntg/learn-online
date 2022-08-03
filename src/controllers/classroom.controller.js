@@ -21,6 +21,11 @@ const createClassroom = async (req, res) => {
 
 const getClassroomById = async (req, res) => {
   try {
+    if (!req.params.id) {
+      res.status(httpStatusCode.BAD_REQUEST).json({
+        message: "Id is required",
+      });
+    }
     const result = await classroomService.getClassroomById(req.params.id);
     res.status(httpStatusCode.OK).json({ result: result });
   } catch (error) {

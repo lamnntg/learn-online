@@ -1,4 +1,5 @@
 import express from "express";
+import { userController } from "../controllers/user.controller";
 import { authJwt } from "../middlewares/authJwt";
 
 const router = express.Router();
@@ -11,3 +12,10 @@ router.use(function (req, res, next) {
   next();
 });
 
+router.get(
+  "/get/by-moderator/:id",
+  [authJwt.verifyToken, authJwt.isAdmin],
+  userController.getAllUsers
+);
+
+export const adminRouter = router;

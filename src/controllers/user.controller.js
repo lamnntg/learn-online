@@ -104,6 +104,15 @@ const submitInvite = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await UserModel.find();
+    res.status(httpStatusCode.OK).json({ users: users });
+  } catch (error) {
+    res.status(httpStatusCode.INTERNAL_SERVER_ERROR).json({ message: new Error(error).message });
+  }
+}
+
 export const userController = {
   allAccess,
   userBoard,
@@ -113,6 +122,7 @@ export const userController = {
   updateAvatar,
   getUserById,
   getClassroomInvite,
-  submitInvite
+  submitInvite,
+  getAllUsers
 };
 

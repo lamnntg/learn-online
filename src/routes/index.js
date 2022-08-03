@@ -6,6 +6,7 @@ import { classroomRouter } from "./classroom.route";
 import { homeworkRouter } from "./homework.route";
 import { qaRouter } from "./qa.route";
 import { courseRoute } from "./course.route";
+import { adminRouter } from "./admin.route";
 
 const router = express.Router();
 
@@ -15,6 +16,8 @@ router.use("/classroom", classroomRouter);
 router.use("/homework", homeworkRouter);
 router.use("/qa", qaRouter);
 router.use("/course", courseRoute);
+router.use("/admin", adminRouter);
+
 
 router.get("/status", (req, res) => {
   res.status(httpStatusCode.OK).json({
