@@ -82,7 +82,7 @@ const signin = (req, res) => {
       var authorities = [];
 
       let isAdmin = false;
-      if (user.roles.length < 0) {
+      if (user.roles.length == 0) {
         return res
           .status(404)
           .send({ message: "Account is blocked" });
@@ -154,6 +154,12 @@ const adminSignin = (req, res) => {
 
       var authorities = [];
       var isAdmin = false;
+      if (user.roles.length == 0) {
+        return res
+          .status(404)
+          .send({ message: "Account is blocked" });
+      }
+      
       for (let i = 0; i < user.roles.length; i++) {
         if (user.roles[i].name == "admin") {
           isAdmin = true;
