@@ -1,7 +1,7 @@
 import express from "express";
 import { userController } from "../controllers/user.controller";
 import { authJwt } from "../middlewares/authJwt";
-
+import { adminController } from "../controllers/admin.controller";
 const router = express.Router();
 
 router.use(function (req, res, next) {
@@ -28,6 +28,18 @@ router.post(
   "/user/delete",
   [authJwt.verifyToken, authJwt.isAdmin],
   userController.deleteUser
+);
+
+router.get(
+  "/course/all",
+  [authJwt.verifyToken, authJwt.isAdmin],
+  adminController.getAllCourse
+);
+
+router.post(
+  "/course/create",
+  [authJwt.verifyToken, authJwt.isAdmin],
+  adminController.createCourse
 );
 
 export const adminRouter = router;
