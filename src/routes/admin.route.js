@@ -13,9 +13,21 @@ router.use(function (req, res, next) {
 });
 
 router.get(
-  "/get/by-moderator/:id",
+  "/user/all",
   [authJwt.verifyToken, authJwt.isAdmin],
   userController.getAllUsers
+);
+
+router.post(
+  "/user/update-roles",
+  [authJwt.verifyToken, authJwt.isAdmin],
+  userController.updateRoles
+);
+
+router.post(
+  "/user/delete",
+  [authJwt.verifyToken, authJwt.isAdmin],
+  userController.deleteUser
 );
 
 export const adminRouter = router;
